@@ -12,10 +12,12 @@ class Role_service {
 		$this->CI = &get_instance();
 		$this->CI->load->model('auth/role_model');
 		$this->CI->load->helper('qizhuan_helper');
+		$this->CI->load->library('log_service');
 	}
 	
 	//获取所有角色
 	public function get_roles() {
+	    $this->CI->log_service->info('get all role');
 		$res = $this->CI->role_model->get_roles();
 		return $res;
 	}
@@ -24,6 +26,7 @@ class Role_service {
 	public function update_role($data) {
 		if(empty($data['roleId'])) {
 			$res = rtn_json('failed', '2', 'roleid is null');
+			$this->CI->log_service->error('roleid is null');
 		} else {
 			$res = $this->CI->role_model->update_role($data);
 			if($res > 0) {
@@ -43,6 +46,7 @@ class Role_service {
 		);
 		if(empty($rolename)) {
 			$res = rtn_json('failed', '3', 'roleid is null');
+            $this->CI->log_service->error('roleid is null');
 		} else {
 			$res = $this->CI->role_model->add_role($arrRole);
 			if($res > 0) {
@@ -56,6 +60,7 @@ class Role_service {
 	public function delete_role($data) {
 		if(empty($data['roleId'])) {
 			$res = rtn_json('failed', '2', 'roleid is null');
+            $this->CI->log_service->error('roleid is null');
 		} else {
 			$res = $this->CI->role_model->delete_role($data['roleId']);
 			if($res > 0) {

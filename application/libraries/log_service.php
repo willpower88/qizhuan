@@ -3,13 +3,6 @@
 if (! defined('BASEPATH'))
     exit('No direct script access allowed');
 
-/**
- * *************************************************************************
- *
- * Copyright (c) 2012 adSage.com, Inc. All Rights Reserved
- *
- * *************************************************************************
- */
 class Log_service
 {
     

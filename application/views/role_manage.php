@@ -1,17 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Insert title here</title>
-	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css"/>
-	<link rel="stylesheet" href="/static/bootstrapValidator/css/bootstrapValidator.css" />
-	<script type="text/javascript" src="/static/jquery/jquery.min.js"></script>
-	<script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="/static/bootstrapValidator/js/bootstrapValidator.js"></script>
-	    
-</head>
-<body>
+<?php $this->load->view('/templates/header') ?>
 	<nav class="navbar navbar-inverse" role="navigation">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -161,5 +148,4 @@
 					});				
 				});
         </script>
-</body>
-</html>
+<?php $this->load->view('/templates/footer') ?>

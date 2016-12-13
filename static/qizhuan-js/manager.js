@@ -1,6 +1,6 @@
 var manage = {
 		urls:{
-			userinfo:'/auth/user/getUser',
+			userinfo:'/auth/adminUser/getAdminUser',
 		},
 		userId:0,
 		branchLevel:0,

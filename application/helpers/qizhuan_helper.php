@@ -134,6 +134,27 @@ if(!function_exists("data_format")){
 	}
 }
 
+if(!function_exists("page_data_format")){
+    function page_data_format($flag, $data, $msg){
+        $res = array();
+        if($flag) {
+            $res = json_encode(array(
+                'status' => 'success',
+                'total' => $data['total'],
+                'pageSize' => $data['pageSize'],
+                'pageIndex' => $data['pageIndex'],
+                'data' => $data['result'],
+            ));
+        } else {
+            $res = json_encode(array(
+                'status' => 'failed',
+                'message' => $msg
+            ));
+        }
+        return $res;
+    }
+}
+
 if(!function_exists("rtn_json")){
 	function rtn_json($status, $error_code, $message) {
 		$res = json_encode ( array (

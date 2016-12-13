@@ -1,21 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Insert title here</title>
-	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css"/>
-	<link rel="stylesheet" href="/static/bootstrapValidator/css/bootstrapValidator.css" />
-	<script type="text/javascript" src="/static/jquery/jquery.min.js"></script>
-	<script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="/static/bootstrapValidator/js/bootstrapValidator.js"></script>
-	<!-- bootstrap data table -->
-	<script type="text/javascript" src="/static/bootstrap-table/bootstrap-table.js"></script>
-    <link rel="stylesheet" href="/static/bootstrap-table/bootstrap-table.css" />
-    <script type="text/javascript" src="/static/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
-	    
-</head>
-<body>
+<?php $this->load->view('/templates/header') ?>
 	<nav class="navbar navbar-inverse" role="navigation">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -64,7 +47,7 @@
             <div class="row">
                 <div class="col-sm-2">
                     <a href="#" class="list-group-item active">权限管理</a>
-                    <a href="#userManage" class="list-group-item">
+                    <a href="#adminUserTable" class="list-group-item">
                         <img src="/static/img/icon.png">账号管理</a>
                     <a href="#roleManage" class="list-group-item">
                         <img src="/static/img/icon.png">角色管理</a>
@@ -77,13 +60,11 @@
                         <li class="active">账号管理
                         </li>
                     </ol>
-					<div id="goodsTable">
+					<div id="adminUserTable">
                     <div class="panel panel-default">
-                        <div class="panel-heading">
-                            搜索
-                        </div>
                         <div class="panel-body">
                             <form role="form" class="form-inline">
+                                <button id='btnAddAdmin' type="button" class="btn btn-success">新增账号</button>
                                 <div class="form-group">
                                     <label for="name">名称</label>
                                     <input type="text" class="form-control" id="name" placeholder="请输入名称">
@@ -105,57 +86,25 @@
                      	   列表展示
                     -->
                     <div class="table-responsive">
-                        <table class="table table-striped ">
+                        <table id="tbAdminUser" class="table table-striped ">
                             <thead>
                                 <tr>
-                                    <th>编号</th>
-                                    <th>图标</th>
-                                    <th>名称</th>
-                                    <th>价格</th>
-                                    <th>邮费</th>
+                                    <th>ID</th>
+                                    <th>用户名</th>
+                                    <th>昵称</th>
+                                    <th>email</th>
+                                    <th>角色</th>
                                     <th>状态</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>15</td>
-                                    <td>
-                                        <img src="/static/img/test.png" class="img-thumbnail" style="height: 30px;" />
-                                    </td>
-                                    <td>超人气无花果</td>
-                                    <td>18.00￥</td>
-                                    <td>18.00￥</td>
-                                    <td>上架</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <a href="" class="btn btn-default">修改</a><a href="" class="btn btn-default">下架</a><a href="" class="btn btn-danger">删除</a>
-                                        </div>
-
-                                    </td>
-                                </tr>
-
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
-                    <ul class="pagination" style="float: right;">
-                        <li><a href="#">&laquo;</a>
-                        </li>
-                        <li class="active"><a href="#">1</a>
-                        </li>
-                        <li class="disabled"><a href="#">2</a>
-                        </li>
-                        <li><a href="#">3</a>
-                        </li>
-                        <li><a href="#">4</a>
-                        </li>
-                        <li><a href="#">5</a>
-                        </li>
-                        <li><a href="#">&raquo;</a>
-                        </li>
-                    </ul>
+                    <div id="adminUserPage" class="m-pagination" >
+                    </div>
                 </div>
-                
+
                 <!-- goodsTable -->
                 <div  id="roleTable">
                 <button id='btnAddRole' type="button" class="btn btn-success">新增角色</button>
@@ -232,34 +181,34 @@
 				var menu = $(this).attr("href");
 				//角色管理
 				if(menu == '#roleManage') {
-					$("#goodsTable").hide();
-					$("#roleTable").show();
-					$(".breadcrumb").find("li").remove();
-					$(".breadcrumb").append("<li class='active'>权限管理</li>");
-					$(".breadcrumb").append("<li class='active'>角色管理</li>");
-					$("#tbRole tbody").html('');
-					$.ajax({
-						type: "GET",
-						url: "http://qizhuan.powersoft.com/auth/role/role",
-						async: true,
-						dataType: "json",
-						success: function(data) {
-							if(data.status == 'success') {
-								createRoleTable(data);
-								}
-							}
-						});	
+					roleManage();
 				}
-				//导航管理
-				if(menu == '#userManage') {
-					$("#goodsTable").show();
-					$("#roleTable").hide();
-					$(".breadcrumb").find("li").remove();
-					$(".breadcrumb").append("<li class='active'>权限管理</li>");
-					$(".breadcrumb").append("<li class='active'>账号管理</li>");
-				}
+				//账号管理
+				if(menu == '#adminUserTable') {
+				    adminUserManage();
+                }
 				});
 			});
+
+			function roleManage() {
+                $("#adminUserTable").hide();
+                $("#roleTable").show();
+                $(".breadcrumb").find("li").remove();
+                $(".breadcrumb").append("<li class='active'>权限管理</li>");
+                $(".breadcrumb").append("<li class='active'>角色管理</li>");
+                $("#tbRole tbody").html('');
+                $.ajax({
+                    type: "GET",
+                    url: "http://qizhuan.powersoft.com/auth/role/role",
+                    async: true,
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.status == 'success') {
+                            createRoleTable(data);
+                        }
+                    }
+                });
+            }
 			function createRoleTable(data) {
 				$.each(data.data, function(idx, obj) {
 					//console.log(obj);
@@ -274,6 +223,85 @@
 							'<a id="deleteRole" href="#" onClick="deleteRole(\'' + obj.id + '\')" class="btn btn-danger">删除</a></div></td></tr>');
 					});
 				}
+
+            function adminUserManage() {
+                $("#adminUserTable").show();
+                $("#roleTable").hide();
+                $(".breadcrumb").find("li").remove();
+                $(".breadcrumb").append("<li class='active'>权限管理</li>");
+                $(".breadcrumb").append("<li class='active'>账号管理</li>");
+                $.ajax({
+                    type: "GET",
+                    url: "http://qizhuan.powersoft.com/auth/adminUser/adminUsers",
+                    async: true,
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.status == 'success') {
+                            createAdminUserTable(data);
+                            createPagination(data);
+                        }
+                    }
+                });
+            }
+
+            function createPagination(data) {
+			    //复位首页高亮
+               $("#adminUserPage ul").find('li').each(function () {
+                   if($(this).hasClass('active')) {
+                       $(this).attr('class','');
+                   }
+                   if($(this).text() == 1) {
+                       $(this).attr('class','active');
+                   }
+               });
+                $("#adminUserPage").page({
+                    showInfo: true,
+                    showJump: true,
+                    pageSize: 2,
+                    showPageSizes: true,
+                    remote: {
+                        url: '/auth/adminUser/adminUsers',
+                        beforeSend: function(XMLHttpRequest){
+                            //...
+                        },
+                        success: function (data, pageIndex) {
+                            $("#eventLog").append('pageIndex : ' + pageIndex + ' ,  remote callback : '
+                                + JSON.stringify(data) + '<br />');
+                            createAdminUserTable(data);
+                        },
+                        complete: function(XMLHttpRequest, textStatu){
+                            //...
+                        }
+                    }
+                }).on("pageClicked", function (event, pageIndex) {
+                    $("#eventLog").append('EventName = pageClicked , pageIndex = ' + pageIndex + '<br />');
+                }).on('jumpClicked', function (event, pageIndex) {
+                    $("#eventLog").append('EventName = jumpClicked , pageIndex = ' + pageIndex + '<br />');
+                }).on('pageSizeChanged', function (event, pageSize) {
+                    $("#eventLog").append('EventName = pageSizeChanged , pageSize = ' + pageSize + '<br />');
+                });
+
+            }
+
+            function createAdminUserTable(data) {
+			    var status = '';
+                $("#tbAdminUser tbody").html('');
+                $.each(data.data, function (idx, obj) {
+                    status = obj.status == '1' ? '正常' : '信用';
+                    $("#tbAdminUser tbody").append(
+                        '<tr><td>' + obj.id + '</td>' +
+                        '<td>' + obj.username + '</td>' +
+                        '<td>' + obj.nickname + '</td>' +
+                        '<td>' + obj.email + '</td>' +
+                        '<td>' + obj.rolename + '</td>' +
+                        '<td>' + status + '</td>' +
+                        '<td> <div class="btn-group">' +
+                        '<a href="" class="btn btn-default">修改</a>' +
+                        '<a href="" class="btn btn-danger">删除</a>' +
+                        '</div></td></tr>'
+                    );
+                });
+            }
 			
 			function roleEdit(id, rolename, status) {
 				
@@ -304,7 +332,7 @@
 			    $('#saveForm').attr('onClick','saveRole()');
 				$('#myModal').modal('show');
 				}
-			
+				
 			function saveRole() {
 				var roleId = $('#roleId').val();
 				var rolename = $('#rolename').val();
@@ -385,27 +413,30 @@
 						success: function(data) {
 							alert(data.status);
 							$('#myModal').modal('hide');
+                            roleManage();
 							}
 						});	
 					
 					}
 
 			function deleteRole(id) {
-				alert('确定要删除？');
-				$.ajax({
-					type: 'GET',
-					url: 'http://qizhuan.powersoft.com/auth/role/roleDelete',
-					data: 'roleId=' + id,
-					dataType: 'json',
-					contentType: 'application/x-www-form-urlencode;charset=utf-8',
-					success: function(data) {
-						alert(data.status);
-						$('#myModal').modal('hide');
-						}
-					});	
-
-				}
+			   if(confirm('确认删除？')) {
+                   //执行删除
+                   $.ajax({
+                       type: 'GET',
+                       url: 'http://qizhuan.powersoft.com/auth/role/roleDelete',
+                       data: 'roleId=' + id,
+                       dataType: 'json',
+                       contentType: 'application/x-www-form-urlencode;charset=utf-8',
+                       success: function(data) {
+                           alert(data.status);
+                           $('#myModal').modal('hide');
+                           roleManage();
+                       }
+                   });
+               } else {}
+            }
 			
         </script>
-</body>
-</html>
+
+<?php $this->load->view('/templates/footer') ?>

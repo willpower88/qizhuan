@@ -19,9 +19,6 @@ class Auth_filter
             redirect('/user/login');
         }
         
-        set_cookie('userid', $userid);
-        set_cookie('roleid', $roleid);
-        set_cookie('username', $username);
         return TRUE;
     }
 

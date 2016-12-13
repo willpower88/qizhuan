@@ -5,7 +5,7 @@ class Auth_api extends CI_Controller {
 	function __construct(){
 		
 		parent::__construct();
-		$this->load->library('service/auth/user_service');
+		$this->load->library('service/auth/admin_user_service');
 		$this->load->library('service/auth/menu_service');
 		$this->load->library('service/auth/role_service');
 		$this->load->library('service/auth/node_service');
@@ -15,7 +15,7 @@ class Auth_api extends CI_Controller {
 	
 	public function user() {
 		$this->auth_filter->check_auth();
-		$res = $this->user_service->get_users();
+		$res = $this->admin_user_service->get_admin_users();
 		$this->output
 			 ->set_content_type('application/json')
 			 ->set_output(data_format(TRUE, $res, ''));
