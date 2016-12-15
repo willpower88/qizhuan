@@ -18,6 +18,9 @@
 --
 -- Table structure for table `qizhuan_admin_user`
 --
+set names utf8;
+create database qizhuan;
+use qizhuan;
 
 DROP TABLE IF EXISTS `qizhuan_admin_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
